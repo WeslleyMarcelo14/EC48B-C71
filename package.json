@@ -1,0 +1,25 @@
+{
+  "name": "ec48b-c71",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node demo/run.js",
+    "dev": "NODE_ENV=development node demo/run.js",
+    "clean": "rm -rf logs/*",
+    "test": "echo \"(Sem testes automatizados no momento)\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WeslleyMarcelo14/EC48B-C71.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WeslleyMarcelo14/EC48B-C71/issues"
+  },
+  "homepage": "https://github.com/WeslleyMarcelo14/EC48B-C71#readme",
+  "dependencies": {
+    "mongodb": "^3.7.4"
+  }
+}
