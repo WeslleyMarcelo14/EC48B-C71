@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Build
+/dist/
+/build/
+
+# Misc
+*.tgz
+*.bak
+*.tmp
+
+# Test
+coverage/
+
+# Ignore demo output
+/demo/*.out
+
+# Ignore database files
+*.sqlite
+*.db
