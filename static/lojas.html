@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lojas</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    form { margin-bottom: 1em; }
+    input[type="text"] { padding: 6px; margin-right: 8px; }
+    button { padding: 6px 12px; }
+  </style>
+</head>
+<body>
+  <h1>Lojas</h1>
+  <button onclick="window.location.href='/';" style="margin-bottom:1em">Voltar para Home</button>
+  <form id="lojaForm">
+    <input type="text" id="nome" placeholder="Nome da Loja" required>
+    <input type="text" id="cidade" placeholder="Cidade" required>
+    <button type="submit">Cadastrar</button>
+  </form>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Nome</th><th>Cidade</th><th>Criado em</th></tr>
+    </thead>
+    <tbody id="lojasBody"></tbody>
+  </table>
+  <script>
+    async function carregarLojas() {
+      const res = await fetch('/api/lojas');
+      const lojas = await res.json();
+      const tbody = document.getElementById('lojasBody');
+      tbody.innerHTML = '';
+      lojas.forEach(l => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${l.id || ''}</td><td>${l.nome}</td><td>${l.cidade}</td><td>${new Date(l.criadoEm).toLocaleString()}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+    document.getElementById('lojaForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value;
+      const cidade = document.getElementById('cidade').value;
+      await fetch('/api/lojas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, cidade })
+      });
+      document.getElementById('lojaForm').reset();
+      carregarLojas();
+    };
+    carregarLojas();
+  </script>
+</body>
+</html>

@@ -1,4 +1,3 @@
-// Script de demonstração manual
 const db = require('../src/db/Database');
 const Usuario = require('../src/entities/Usuario');
 const Loja = require('../src/entities/Loja');
@@ -53,7 +52,7 @@ const ListarPedidosUsuarioUseCase = require('../src/usecases/ListarPedidosUsuari
     const pedidoAprovado = await aprovarPedido.execute({ pedidoId: pedido.id, lojaId: lojaSaved.id });
     console.log('Pedido aprovado:', pedidoAprovado.status);
 
-    // Registrar entrega (também muda status para ENVIADO se estiver APROVADO)
+    // Registrar entrega 
     const registrarEntrega = new RegistrarEntregaUseCase({ pedidoRepo, entregaRepo });
     const entrega = await registrarEntrega.execute({ pedidoId: pedido.id, endereco: 'Rua A, 123' });
     console.log('Entrega registrada:', entrega);

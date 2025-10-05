@@ -6,7 +6,7 @@ class Entrega {
     if (!endereco) throw new ValidationError('endereco é obrigatório', { field: 'endereco' });
     this.id = id;
     this.pedidoId = pedidoId;
-    this.endereco = endereco; // string simples neste modelo mínimo
+    this.endereco = endereco;
     this.status = status; // PENDENTE -> A_CAMINHO -> ENTREGUE
     this.criadoEm = new Date();
     this.atualizadoEm = new Date();
