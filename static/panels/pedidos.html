@@ -53,12 +53,12 @@
     }
   }
 
-  console.log('🔍 Pedidos - form encontrado:', !!form);
+  console.log('Pedidos - form encontrado:', !!form);
   if (form) {
-    console.log('✅ Pedidos - Registrando event listener');
+    console.log('Pedidos - Registrando event listener');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log('📝 Pedidos - Submit do formulário');
+      console.log('Pedidos - Submit do formulário');
       
       try {
         const response = await fetch('/api/pedidos', {
@@ -128,7 +128,6 @@
     }
   };
 
-  // Carregar pedidos ao inicializar o painel
   loadPedidos();
 })();
 </script>

@@ -36,10 +36,10 @@ function toObjectId(val) {
   }
   return null;
 }
-router.get('/', requireAuth, async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   try {
-    const { Products } = req.app.locals.db;
-    const produtos = await Products.find().toArray();
+    const { Produtos } = req.app.locals.db;
+    const produtos = await Produtos.find().toArray();
     res.json(produtos);
   } catch (error) {
     console.error('Erro em GET /api/produtos:', error);
@@ -56,7 +56,7 @@ router.post('/', requireAuth, async (req, res) => {
     const nomeLower = String(nome).trim().toLowerCase();
     const precoNum = Number(preco);
     const key = productKey(nomeLower, precoNum);
-    const existing = await Products.findOne({ nomeLower, preco: precoNum });
+    const existing = await Produtos.findOne({ nomeLower, preco: precoNum });
     if (existing) {
       return res.status(200).json({
         mensagem: 'Produto já existe',
@@ -79,12 +79,12 @@ router.post('/', requireAuth, async (req, res) => {
         criadoEm: new Date()
       };
       try {
-        const result = await Products.insertOne(doc);
+        const result = await Produtos.insertOne(doc);
         doc._id = result.insertedId;
         return res.status(201).json(doc);
       } catch (error) {
         if (error && error.code === 11000) {
-          const found = await Products.findOne({ nomeLower, preco: precoNum });
+          const found = await Produtos.findOne({ nomeLower, preco: precoNum });
           if (found) {
             return res.status(200).json({
               mensagem: 'Produto já existe',
@@ -109,8 +109,8 @@ router.delete('/:id', requireAuth, async (req, res) => {
     if (!oid) {
       return res.status(400).json({ erro: 'ID inválido' });
     }
-    const { Products } = req.app.locals.db;
-    const doc = await Products.findOneAndDelete({ _id: oid });
+    const { Produtos } = req.app.locals.db;
+    const doc = await Produtos.findOneAndDelete({ _id: oid });
     if (!doc) {
       return res.status(404).json({ erro: 'Produto não encontrado' });
     }

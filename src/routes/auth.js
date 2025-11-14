@@ -8,8 +8,8 @@ router.post('/login', async (req, res) => {
     if (!email || !senha) {
       return res.status(400).json({ erro: 'Email e senha obrigatórios' });
     }
-    const { Users } = req.app.locals.db;
-    const user = await Users.findOne({ email });
+    const { Usuarios } = req.app.locals.db;
+    const user = await Usuarios.findOne({ email });
     if (!user) {
       return res.status(400).json({ erro: 'Usuário não encontrado' });
     }
@@ -57,4 +57,4 @@ router.get('/me', async (req, res) => {
     res.status(500).json({ erro: 'Erro interno do servidor' });
   }
 });
-module.exports = router;
+module.exports = router;

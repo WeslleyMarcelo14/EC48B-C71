@@ -33,11 +33,11 @@ function requireRole(requiredRole) {
 async function getSessionUser(req) {
   if (!req.session || !req.session.userId) return null;
   try {
-    const { Users } = req.app.locals.db;
+    const { Usuarios } = req.app.locals.db;
     const id = ObjectId.isValid(req.session.userId) ?
       new ObjectId(req.session.userId) : null;
     if (!id) return null;
-    return await Users.findOne(
+    return await Usuarios.findOne(
       { _id: id },
       { projection: { senhaHash: 0 } }
     );
@@ -50,4 +50,4 @@ module.exports = {
   requireAuth,
   requireRole,
   getSessionUser
-};
+};

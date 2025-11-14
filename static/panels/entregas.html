@@ -56,12 +56,12 @@
     }
   }
 
-  console.log('🔍 Entregas - form encontrado:', !!form);
+  console.log('Entregas - form encontrado:', !!form);
   if (form) {
-    console.log('✅ Entregas - Registrando event listener');
+    console.log('Entregas - Registrando event listener');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log('📝 Entregas - Submit do formulário');
+      console.log('Entregas - Submit do formulário');
       
       try {
         const response = await fetch('/api/entregas', {
@@ -111,7 +111,6 @@
     }
   };
 
-  // Carregar entregas ao inicializar o painel
   loadEntregas();
 })();
 </script>

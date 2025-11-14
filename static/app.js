@@ -9,6 +9,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const topLogoutBtn = qs('#top-logout-btn');
   const authToggle = qs('#btn-show-auth');
   const navButtons = qsa('.nav-btn');
+  
+  const authLoginTab = document.querySelector('[data-tab="login"]');
+  const authRegisterTab = document.querySelector('[data-tab="register"]');
+  const authLoginForm = document.getElementById('login-form');
+  const authRegisterForm = document.getElementById('register-form');
+
+  document.addEventListener('click', (e) => {
+    if (e.target.matches('.tab-btn')) {
+      const targetTab = e.target.dataset.tab;
+      const allTabs = document.querySelectorAll('.tab-btn');
+      const allForms = document.querySelectorAll('.auth-form');
+      
+      allTabs.forEach(tab => tab.classList.remove('active'));
+      allForms.forEach(form => form.classList.remove('active'));
+      
+      e.target.classList.add('active');
+      const targetForm = document.getElementById(`${targetTab}-form`);
+      if (targetForm) {
+        targetForm.classList.add('active');
+      }
+    }
+  });
   let currentUser = null;
   const sidebarNav = document.getElementById('sidebar-nav');
   function renderPanelActions(panelName) {
@@ -184,20 +206,20 @@ document.addEventListener('DOMContentLoaded', () => {
     panels.addEventListener('click', async (e) => {
     const delBtn = e.target.closest && e.target.closest('.btn-del');
     if (delBtn) {
-      console.log('🗑️ Botão de exclusão encontrado:', delBtn);
+      console.log('Botão de exclusão encontrado:', delBtn);
       const id = delBtn.dataset.id;
       const type = delBtn.dataset.type || (document.querySelector('.nav-btn.active')?.dataset.target || 'produtos');
-      console.log(`🔍 ID: ${id}, Tipo: ${type}`);
+      console.log(`ID: ${id}, Tipo: ${type}`);
       if (!id) return showMessage('ID do item inválido', 'error');
       if (!confirm('Confirma exclusão?')) return;
       try {
-        console.log(`🚀 Fazendo requisição DELETE para: /api/${type}/${id}`);
+        console.log(`Fazendo requisição DELETE para: /api/${type}/${id}`);
         await api(`/api/${type}/${id}`, { method: 'DELETE' });
-        console.log('✅ Exclusão bem-sucedida, recarregando painel');
+        console.log('Exclusão bem-sucedida, recarregando painel');
         showMessage('Excluído', 'success');
         loadPanel(type);
       } catch (err) {
-        console.error('❌ Erro na exclusão:', err);
+        console.error('Erro na exclusão:', err);
         if (err.status === 401) { beforeLogout(); showMessage('Sessão expirada', 'error'); }
         else showMessage(err.data?.erro || 'Erro ao excluir', 'error');
       }
@@ -284,9 +306,13 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const html = await api(`/api/painel/${name}`);
       panels.innerHTML = html;
+      panels.classList.add('fade-in');
+      setTimeout(() => panels.classList.remove('fade-in'), 300);
       setupPanelEvents(name);
     } catch (err) {
       panels.innerHTML = `<div class="error">Erro ao carregar painel: ${err.data?.erro || err.message}</div>`;
+      panels.classList.add('fade-in');
+      setTimeout(() => panels.classList.remove('fade-in'), 300);
     } finally {
       loadPanel._busy = false;
     }
@@ -331,10 +357,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function setupPedidosEvents() {
     const form = document.getElementById('pedido-form');
     if (form) {
-      console.log('✅ Pedidos - Configurando formulário');
+      console.log('Pedidos - Configurando formulário');
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        console.log('📝 Pedidos - Submit');
+        console.log('Pedidos - Submit');
         const descricao = document.getElementById('pedido-descricao').value;
         const valor = document.getElementById('pedido-valor').value;
         try {
@@ -356,10 +382,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function setupEntregasEvents() {
     const form = document.getElementById('entrega-form');
     if (form) {
-      console.log('✅ Entregas - Configurando formulário');
+      console.log('Entregas - Configurando formulário');
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        console.log('📝 Entregas - Submit');
+        console.log('Entregas - Submit');
         const destinatario = document.getElementById('entrega-destinatario').value;
         const status = document.getElementById('entrega-status').value;
         try {
@@ -381,10 +407,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function setupLojasEvents() {
     const form = document.getElementById('loja-form');
     if (form) {
-      console.log('✅ Lojas - Configurando formulário');
+      console.log('Lojas - Configurando formulário');
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        console.log('📝 Lojas - Submit');
+        console.log('Lojas - Submit');
         const nome = document.getElementById('loja-nome').value;
         const cidade = document.getElementById('loja-cidade').value;
         try {
@@ -563,4 +589,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   };
-});
+});

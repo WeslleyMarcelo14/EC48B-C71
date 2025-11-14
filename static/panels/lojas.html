@@ -50,12 +50,12 @@
     }
   }
 
-  console.log('🔍 Lojas - form encontrado:', !!form);
+  console.log('Lojas - form encontrado:', !!form);
   if (form) {
-    console.log('✅ Lojas - Registrando event listener');
+    console.log('Lojas - Registrando event listener');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      console.log('📝 Lojas - Submit do formulário');
+      console.log('Lojas - Submit do formulário');
       
       try {
         const response = await fetch('/api/lojas', {
@@ -105,7 +105,6 @@
     }
   };
 
-  // Carregar lojas ao inicializar o painel
   loadLojas();
 })();
 </script>

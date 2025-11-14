@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
         recebido: { nome: !!nome, email: !!email, senha: !!senha }
       });
     }
-    const { Users } = req.app.locals.db;
+    const { Usuarios } = req.app.locals.db;
     const senhaHash = await bcrypt.hash(senha, 10);
     const doc = {
       nome,
@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
       criadoEm: new Date()
     };
     try {
-      const result = await Users.insertOne(doc);
+      const result = await Usuarios.insertOne(doc);
       req.session.userId = result.insertedId.toString();
       req.session.save(err => {
         const usuario = {
@@ -60,12 +60,12 @@ router.post('/', async (req, res) => {
 });
 router.get('/', requireAuth, async (req, res) => {
   try {
-    const { Users } = req.app.locals.db;
-    const list = await Users.find({}, { projection: { senhaHash: 0 } }).toArray();
+    const { Usuarios } = req.app.locals.db;
+    const list = await Usuarios.find({}, { projection: { senhaHash: 0 } }).toArray();
     res.json(list);
   } catch (error) {
     console.error('Erro em GET /api/usuarios:', error);
     res.status(500).json({ erro: 'Erro ao listar usuários' });
   }
 });
-module.exports = router;
+module.exports = router;

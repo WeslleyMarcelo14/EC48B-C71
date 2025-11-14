@@ -6,7 +6,7 @@ const { MongoClient } = require('mongodb');
 const apiRoutes = require('./src/routes');
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017';
-const DB_NAME = process.env.DB_NAME || 'ifood';
+const DB_NAME = process.env.DB_NAME || 'EC48B';
 const app = express();
 app.disable('etag');
 app.use('/api', (req, res, next) => {
@@ -27,7 +27,7 @@ app.use((err, req, res, next) => {
 });
 app.use(session({
   name: 'sessao_projeto',
-  secret: process.env.SESSION_SECRET || 'troque_esta_chave_para_producao',
+  secret: process.env.SESSION_SECRET || 'ec48b-secret-key-change-in-production',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -53,14 +53,14 @@ async function initializeDatabase() {
     console.log('Conectado ao MongoDB em', MONGO_URI);
     const db = client.db(DB_NAME);
     app.locals.db = {
-      Users: db.collection('users'),
-      Products: db.collection('products'),
+      Usuarios: db.collection('usuarios'),
+      Produtos: db.collection('produtos'),
       Pedidos: db.collection('pedidos'),
       Entregas: db.collection('entregas'),
       Lojas: db.collection('lojas')
     };
-    await app.locals.db.Users.createIndex({ email: 1 }, { unique: true });
-    await app.locals.db.Products.createIndex({ nomeLower: 1, preco: 1 }, { unique: true });
+    await app.locals.db.Usuarios.createIndex({ email: 1 }, { unique: true });
+    await app.locals.db.Produtos.createIndex({ nomeLower: 1, preco: 1 }, { unique: true });
     await app.locals.db.Pedidos.createIndex({ clienteId: 1 });
     await app.locals.db.Lojas.createIndex({ vendedorId: 1 });
     console.log('Banco de dados inicializado com sucesso');

@@ -3,55 +3,80 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>iFood — Projeto</title>
+  <title>EC48B — Projeto</title>
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
   <div id="app">
     <div id="main">
       <header id="topbar">
-
+        <div class="logo">
+          <h1>EC48B</h1>
+        </div>
         <div class="auth-area">
-          <button id="top-logout-btn" class="btn secondary hidden">Logout</button>
+          <span id="user-display" class="user-info hidden">Bem-vindo!</span>
+          <button id="logout-btn" class="btn secondary hidden">Sair</button>
         </div>
       </header>
 
       <aside id="sidebar-nav" class="hidden">
         <nav>
-          <h2>Menu</h2>
-          <div id="user-name">Não autenticado</div>
-          <button class="nav-btn active" data-target="produtos" data-role="both">Produtos</button>
-          <button class="nav-btn" data-target="pedidos" data-role="both">Pedidos</button>
-          <button class="nav-btn" data-target="entregas" data-role="both">Entregas</button>
-          <button class="nav-btn" data-target="lojas" data-role="vendedor">Lojas</button>
-          <button class="nav-btn" data-target="usuarios" data-role="both">Usuários</button>
-          <button id="logout-btn" class="btn secondary hidden">Logout</button>
+          <h2>📋 Menu</h2>
+          <button class="nav-btn active" data-target="produtos" data-role="both">🛍️ Produtos</button>
+          <button class="nav-btn" data-target="pedidos" data-role="both">📦 Pedidos</button>
+          <button class="nav-btn" data-target="entregas" data-role="both">🚚 Entregas</button>
+          <button class="nav-btn" data-target="lojas" data-role="vendedor">🏪 Lojas</button>
+          <button class="nav-btn" data-target="usuarios" data-role="both">👥 Usuários</button>
         </nav>
       </aside>
 
       <main id="content">
-        <section id="auth-panel" class="card auth-card">
-          <div class="auth-forms">
-            <div>
-              <h3>Entrar</h3>
-              <form id="form-login">
-                <input name="email" placeholder="Email" required />
-                <input name="senha" type="password" placeholder="Senha" required />
-                <button type="submit" class="btn">Entrar</button>
-              </form>
+        <section id="auth-panel" class="auth-container">
+          <div class="auth-wrapper">
+            <div class="auth-header">
+              <h1>EC48B</h1>
+              <p>Sistema de Gerenciamento</p>
             </div>
-            <div>
-              <h3>Registrar</h3>
-              <form id="form-register">
-                <input name="nome" placeholder="Nome" required />
-                <input name="email" placeholder="Email" required />
-                <input name="senha" type="password" placeholder="Senha" required />
-                <select name="role" required>
-                  <option value="cliente">Cliente</option>
-                  <option value="vendedor">Vendedor</option>
-                </select>
-                <button type="submit" class="btn">Registrar</button>
-              </form>
+            
+            <div class="auth-tabs">
+              <button class="tab-btn active" data-tab="login">Entrar</button>
+              <button class="tab-btn" data-tab="register">Registrar</button>
+            </div>
+
+            <div class="auth-forms">
+              <div id="login-form" class="auth-form active">
+                <form id="form-login">
+                  <div class="form-group">
+                    <input name="email" type="email" placeholder="📧 Email" required />
+                  </div>
+                  <div class="form-group">
+                    <input name="senha" type="password" placeholder="🔒 Senha" required />
+                  </div>
+                  <button type="submit" class="btn primary">Entrar</button>
+                </form>
+              </div>
+              
+              <div id="register-form" class="auth-form">
+                <form id="form-register">
+                  <div class="form-group">
+                    <input name="nome" placeholder="👤 Nome completo" required />
+                  </div>
+                  <div class="form-group">
+                    <input name="email" type="email" placeholder="📧 Email" required />
+                  </div>
+                  <div class="form-group">
+                    <input name="senha" type="password" placeholder="🔒 Senha" required />
+                  </div>
+                  <div class="form-group">
+                    <select name="role" required>
+                      <option value="">Selecione o tipo</option>
+                      <option value="cliente">👤 Cliente</option>
+                      <option value="vendedor">🏪 Vendedor</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn primary">Registrar</button>
+                </form>
+              </div>
             </div>
           </div>
         </section>
