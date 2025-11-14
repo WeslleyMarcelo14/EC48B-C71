@@ -1,7 +1,6 @@
 const ValidationError = require('../errors/ValidationError');
 const RepositoryError = require('../errors/RepositoryError');
 const logger = require('../log/logger');
-
 class ListarPedidosUsuarioUseCase {
   constructor({ pedidoRepo }) { this.pedidoRepo = pedidoRepo; }
   async execute({ usuarioId }) {
@@ -15,4 +14,4 @@ class ListarPedidosUsuarioUseCase {
     }
   }
 }
-module.exports = ListarPedidosUsuarioUseCase;
+module.exports = ListarPedidosUsuarioUseCase;

@@ -1,5 +1,4 @@
 const ValidationError = require('../errors/ValidationError');
-
 class Loja {
   constructor({ id = null, nome, cnpj }) {
     if (!nome) throw new ValidationError('Campo nome é obrigatório', { field: 'nome' });
@@ -14,4 +13,4 @@ class Loja {
     return { nome: this.nome, cnpj: this.cnpj, ativa: this.ativa, criadoEm: this.criadoEm };
   }
 }
-module.exports = Loja;
+module.exports = Loja;

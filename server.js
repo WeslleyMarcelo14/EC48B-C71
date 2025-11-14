@@ -1,271 +1,103 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
 const path = require('path');
-
-const PORT = 3000;
-
-let usuarios = [];
-let usuarioId = 1;
-let produtos = [];
-let produtoId = 1;
-let pedidos = [];
-let pedidoId = 1;
-let entregas = [];
-let entregaId = 1;
-let lojas = [];
-let lojaId = 1;
-
-const server = http.createServer((req, res) => {
-
-  const url = new URL(req.url, `http://${req.headers.host}`);
-  const pathname = url.pathname;
-
-  if (pathname === '/api/lojas') {
-    if (req.method === 'GET') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(lojas));
-      return;
-    }
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => { body += chunk; });
-      req.on('end', () => {
-        try {
-          const { nome, cidade } = JSON.parse(body);
-          if (!nome || !cidade) throw new Error('Nome e cidade obrigatórios');
-          const novaLoja = {
-            id: lojaId++,
-            nome,
-            cidade,
-            criadoEm: new Date().toISOString()
-          };
-          lojas.push(novaLoja);
-          res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify(novaLoja));
-        } catch (e) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ erro: e.message }));
-        }
-      });
-      return;
-    }
-    res.writeHead(405);
-    res.end();
-    return;
-  }
-
-  if (pathname === '/api/entregas') {
-    if (req.method === 'GET') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(entregas));
-      return;
-    }
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => { body += chunk; });
-      req.on('end', () => {
-        try {
-          const { destinatario, status } = JSON.parse(body);
-          if (!destinatario || !status) throw new Error('Destinatário e status obrigatórios');
-          const novaEntrega = {
-            id: entregaId++,
-            destinatario,
-            status,
-            criadoEm: new Date().toISOString()
-          };
-          entregas.push(novaEntrega);
-          res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify(novaEntrega));
-        } catch (e) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ erro: e.message }));
-        }
-      });
-      return;
-    }
-    res.writeHead(405);
-    res.end();
-    return;
-  }
-
-  if (pathname === '/api/pedidos') {
-    if (req.method === 'GET') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(pedidos));
-      return;
-    }
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => { body += chunk; });
-      req.on('end', () => {
-        try {
-          const { descricao, valor } = JSON.parse(body);
-          if (!descricao || valor == null) throw new Error('Descrição e valor obrigatórios');
-          const novoPedido = {
-            id: pedidoId++,
-            descricao,
-            valor: Number(valor),
-            criadoEm: new Date().toISOString()
-          };
-          pedidos.push(novoPedido);
-          res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify(novoPedido));
-        } catch (e) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ erro: e.message }));
-        }
-      });
-      return;
-    }
-    res.writeHead(405);
-    res.end();
-    return;
-  }
-
-  if (pathname === '/api/produtos') {
-    if (req.method === 'GET') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(produtos));
-      return;
-    }
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => { body += chunk; });
-      req.on('end', () => {
-        try {
-          const { nome, preco } = JSON.parse(body);
-          if (!nome || preco == null) throw new Error('Nome e preço obrigatórios');
-          const novoProduto = {
-            id: produtoId++,
-            nome,
-            preco: Number(preco),
-            criadoEm: new Date().toISOString()
-          };
-          produtos.push(novoProduto);
-          res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify(novoProduto));
-        } catch (e) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ erro: e.message }));
-        }
-      });
-      return;
-    }
-    res.writeHead(405);
-    res.end();
-    return;
-  }
-
-  if (pathname === '/api/usuarios') {
-    if (req.method === 'GET') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(usuarios));
-      return;
-    }
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => { body += chunk; });
-      req.on('end', () => {
-        try {
-          const { nome, email } = JSON.parse(body);
-          if (!nome || !email) throw new Error('Nome e email obrigatórios');
-          const novoUsuario = {
-            id: usuarioId++,
-            nome,
-            email,
-            criadoEm: new Date().toISOString()
-          };
-          usuarios.push(novoUsuario);
-          res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify(novoUsuario));
-        } catch (e) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ erro: e.message }));
-        }
-      });
-      return;
-    }
-    res.writeHead(405);
-    res.end();
-    return;
-  }
-
-
-  if (pathname === '/api/usuarios') {
-    if (req.method === 'GET') {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(usuarios));
-      return;
-    }
-    if (req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => { body += chunk; });
-      req.on('end', () => {
-        try {
-          const { nome, email } = JSON.parse(body);
-          if (!nome || !email) throw new Error('Nome e email obrigatórios');
-          const novoUsuario = {
-            id: usuarioId++,
-            nome,
-            email,
-            criadoEm: new Date().toISOString()
-          };
-          usuarios.push(novoUsuario);
-          res.writeHead(201, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify(novoUsuario));
-        } catch (e) {
-          res.writeHead(400, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ erro: e.message }));
-        }
-      });
-      return;
-    }
-    res.writeHead(405);
-    res.end();
-    return;
-  }
-
-  if (pathname.startsWith('/static/')) {
-    const filePath = path.join(__dirname, 'static', pathname.replace('/static/', ''));
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Arquivo não encontrado');
-      } else {
-        res.writeHead(200);
-        res.end(data);
-      }
-    });
-    return;
-  }
-
-  // Conteúdo dinâmico: saudação personalizada
-  if (pathname === '/saudacao') {
-    const nome = url.searchParams.get('nome') || 'Visitante';
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end(`Olá, ${nome}! Bem-vindo ao servidor Node.js!`);
-    return;
-  }
-
-  if (pathname === '/' || pathname === '/index.html') {
-    const filePath = path.join(__dirname, 'static', 'index.html');
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('Erro ao carregar a página inicial');
-      } else {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(data);
-      }
-    });
-    return;
-  }
-
-  // Rota não encontrada
-  res.writeHead(404, { 'Content-Type': 'text/plain' });
-  res.end('Rota não encontrada');
+const { MongoClient } = require('mongodb');
+const apiRoutes = require('./src/routes');
+const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017';
+const DB_NAME = process.env.DB_NAME || 'ifood';
+const app = express();
+app.disable('etag');
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
 });
-
-server.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use((err, req, res, next) => {
+  if (!err) return next();
+  console.error('Erro de parse no body:', err && err.stack ? err.stack : err);
+  if (err.type === 'entity.parse.failed' || err instanceof SyntaxError) {
+    return res.status(400).json({ erro: 'Corpo JSON inválido' });
+  }
+  next(err);
 });
+app.use(session({
+  name: 'sessao_projeto',
+  secret: process.env.SESSION_SECRET || 'troque_esta_chave_para_producao',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 60 * 60 * 1000,
+    sameSite: 'lax',
+    httpOnly: true,
+    secure: false
+  }
+}));
+app.set('views', path.join(__dirname, 'static'));
+app.set('view engine', 'ejs');
+app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use((req, res, next) => {
+  if (req.path && req.path.startsWith('/.well-known')) {
+    return res.status(204).end();
+  }
+  return next();
+});
+async function initializeDatabase() {
+  try {
+    const client = new MongoClient(MONGO_URI);
+    await client.connect();
+    console.log('Conectado ao MongoDB em', MONGO_URI);
+    const db = client.db(DB_NAME);
+    app.locals.db = {
+      Users: db.collection('users'),
+      Products: db.collection('products'),
+      Pedidos: db.collection('pedidos'),
+      Entregas: db.collection('entregas'),
+      Lojas: db.collection('lojas')
+    };
+    await app.locals.db.Users.createIndex({ email: 1 }, { unique: true });
+    await app.locals.db.Products.createIndex({ nomeLower: 1, preco: 1 }, { unique: true });
+    await app.locals.db.Pedidos.createIndex({ clienteId: 1 });
+    await app.locals.db.Lojas.createIndex({ vendedorId: 1 });
+    console.log('Banco de dados inicializado com sucesso');
+  } catch (error) {
+    console.error('Erro ao conectar MongoDB:', error);
+    process.exit(1);
+  }
+}
+async function startServer() {
+  try {
+    await initializeDatabase();
+    app.use('/api', apiRoutes);
+    app.get(['/', '/index.html'], (req, res) => {
+      const indexPath = path.join(__dirname, 'static', 'index.html');
+      res.sendFile(indexPath, err => {
+        if (err) res.status(500).send('Erro ao carregar a página inicial');
+      });
+    });
+    app.use((req, res) => {
+      console.warn(`404 - Rota não encontrada: ${req.method} ${req.originalUrl}`);
+      if (req.originalUrl.startsWith('/api/')) {
+        return res.status(404).json({ erro: 'Rota não encontrada' });
+      }
+      const indexPath = path.join(__dirname, 'static', 'index.html');
+      res.sendFile(indexPath, err => {
+        if (err) {
+          console.error('Erro ao enviar index.html para rota desconhecida:', err);
+          return res.status(500).send('Erro interno');
+        }
+      });
+    });
+    app.listen(PORT, () => {
+      console.log(`Servidor Express rodando em http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error('Erro ao inicializar servidor:', error);
+    process.exit(1);
+  }
+}
+startServer();

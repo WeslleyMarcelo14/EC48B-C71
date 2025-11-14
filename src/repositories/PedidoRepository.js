@@ -1,6 +1,5 @@
 const BaseRepository = require('./BaseRepository');
 const NotFoundError = require('../errors/NotFoundError');
-
 class PedidoRepository extends BaseRepository {
   constructor() { super('pedidos'); }
   async atualizarStatus(id, status) {
@@ -14,4 +13,4 @@ class PedidoRepository extends BaseRepository {
     return this.updateById(id, { itens: novosItens, total });
   }
 }
-module.exports = PedidoRepository;
+module.exports = PedidoRepository;

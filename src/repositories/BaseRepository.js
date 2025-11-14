@@ -2,7 +2,6 @@ const db = require('../db/Database');
 const RepositoryError = require('../errors/RepositoryError');
 const NotFoundError = require('../errors/NotFoundError');
 const logger = require('../log/logger');
-
 class BaseRepository {
   constructor(collectionName) {
     this.collectionName = collectionName;
@@ -72,4 +71,4 @@ class BaseRepository {
     }
   }
 }
-module.exports = BaseRepository;
+module.exports = BaseRepository;

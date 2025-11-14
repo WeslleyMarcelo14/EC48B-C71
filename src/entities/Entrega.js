@@ -1,5 +1,4 @@
 const ValidationError = require('../errors/ValidationError');
-
 class Entrega {
   constructor({ id = null, pedidoId, endereco, status = 'PENDENTE' }) {
     if (!pedidoId) throw new ValidationError('pedidoId é obrigatório', { field: 'pedidoId' });
@@ -7,7 +6,7 @@ class Entrega {
     this.id = id;
     this.pedidoId = pedidoId;
     this.endereco = endereco;
-    this.status = status; // PENDENTE -> A_CAMINHO -> ENTREGUE
+    this.status = status;
     this.criadoEm = new Date();
     this.atualizadoEm = new Date();
   }
@@ -21,4 +20,4 @@ class Entrega {
     return { pedidoId: this.pedidoId, endereco: this.endereco, status: this.status, criadoEm: this.criadoEm, atualizadoEm: this.atualizadoEm };
   }
 }
-module.exports = Entrega;
+module.exports = Entrega;

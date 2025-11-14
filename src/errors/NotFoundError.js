@@ -4,4 +4,4 @@ class NotFoundError extends Error {
     this.name = 'NotFoundError';
   }
 }
-module.exports = NotFoundError;
+module.exports = NotFoundError;

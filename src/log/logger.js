@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const config = require('../config/env');
-
 function ensureDir(dir) { if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); }
-
 function rotateIfNeeded(filePath) {
   try {
     if (fs.existsSync(filePath)) {
@@ -13,9 +11,8 @@ function rotateIfNeeded(filePath) {
         fs.renameSync(filePath, filePath + '.' + ts + '.bak');
       }
     }
-  } catch (_) { /* ignorar rotação falha */ }
+  } catch (_) {  }
 }
-
 class Logger {
   constructor() {
     ensureDir(config.log.dir);
@@ -34,4 +31,4 @@ class Logger {
     this.error(err.message, { name: err.name, stack: err.stack, ...context });
   }
 }
-module.exports = new Logger();
+module.exports = new Logger();

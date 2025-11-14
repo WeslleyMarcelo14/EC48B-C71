@@ -5,4 +5,4 @@ class RepositoryError extends Error {
     this.cause = cause;
   }
 }
-module.exports = RepositoryError;
+module.exports = RepositoryError;

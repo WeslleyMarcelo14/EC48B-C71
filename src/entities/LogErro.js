@@ -10,4 +10,4 @@ class LogErro {
     return { nomeErro: this.nomeErro, mensagem: this.mensagem, stack: this.stack, data: this.data };
   }
 }
-module.exports = LogErro;
+module.exports = LogErro;

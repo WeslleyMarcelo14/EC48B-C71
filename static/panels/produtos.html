@@ -1,0 +1,17 @@
+<div class="panel produtos">
+  <h2>Produtos</h2>
+  <form id="produto-form" class="form">
+    <div class="form-group">
+      <input type="text" id="produto-nome" placeholder="Nome do produto" required>
+    </div>
+    <div class="form-group">
+      <input type="number" id="produto-preco" placeholder="Preço" step="0.01" min="0" required>
+    </div>
+    <button type="submit" class="btn primary">Cadastrar Produto</button>
+  </form>
+  
+  <div id="produtos-list" class="list-container">
+    <h3>Lista de Produtos</h3>
+    <div id="produtos-items" class="items"></div>
+  </div>
+</div>

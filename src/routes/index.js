@@ -1,0 +1,21 @@
+const express = require('express');
+const authRoutes = require('./auth');
+const userRoutes = require('./usuarios');
+const productRoutes = require('./produtos');
+const pedidoRoutes = require('./pedidos');
+const entregaRoutes = require('./entregas');
+const lojaRoutes = require('./lojas');
+const painelRoutes = require('./painel');
+const router = express.Router();
+router.use('/', authRoutes);
+router.use('/usuarios', userRoutes);
+router.use('/produtos', productRoutes);
+router.use('/pedidos', pedidoRoutes);
+router.use('/entregas', entregaRoutes);
+router.use('/lojas', lojaRoutes);
+router.use('/painel', painelRoutes);
+router.get('/saudacao', (req, res) => {
+  const nome = req.query.nome || 'Visitante';
+  res.send(`Olá, ${nome}! Bem-vindo ao servidor Express.js!`);
+});
+module.exports = router;

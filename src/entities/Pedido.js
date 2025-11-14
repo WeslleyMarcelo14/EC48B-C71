@@ -1,5 +1,4 @@
 const ValidationError = require('../errors/ValidationError');
-
 class PedidoItem {
   constructor({ produtoId, quantidade, precoUnitario }) {
     if (!produtoId) throw new ValidationError('produtoId obrigatório', { field: 'produtoId' });
@@ -11,7 +10,6 @@ class PedidoItem {
     this.subtotal = quantidade * precoUnitario;
   }
 }
-
 class Pedido {
   constructor({ id = null, usuarioId, lojaId, itens = [] }) {
     if (!usuarioId) throw new ValidationError('usuarioId é obrigatório', { field: 'usuarioId' });
@@ -20,7 +18,7 @@ class Pedido {
     this.id = id;
     this.usuarioId = usuarioId;
     this.lojaId = lojaId;
-    this.status = 'CRIADO'; // CRIADO -> APROVADO -> ENVIADO -> ENTREGUE / CANCELADO
+    this.status = 'CRIADO';
     this.itens = itens.map(i => new PedidoItem(i));
     this.total = this.itens.reduce((s, i) => s + i.subtotal, 0);
     this.criadoEm = new Date();
@@ -58,4 +56,4 @@ class Pedido {
     };
   }
 }
-module.exports = { Pedido, PedidoItem };
+module.exports = { Pedido, PedidoItem };

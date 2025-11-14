@@ -1,0 +1,43 @@
+<div class="panel usuarios">
+  <h2>Usuários</h2>
+  
+  <div id="usuarios-list" class="list-container">
+    <h3>Lista de Usuários</h3>
+    <div id="usuarios-items" class="items"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const itemsContainer = document.getElementById('usuarios-items');
+
+  async function loadUsuarios() {
+    try {
+      const response = await fetch('/api/usuarios', { credentials: 'same-origin' });
+      const usuarios = await response.json();
+      
+      itemsContainer.innerHTML = '';
+      usuarios.forEach(usuario => {
+        const item = document.createElement('div');
+        item.className = 'item card';
+        const roleClass = usuario.role === 'vendedor' ? 'primary' : 'secondary';
+        item.innerHTML = `
+          <div class="item-info">
+            <h4>${usuario.nome}</h4>
+            <p>Email: ${usuario.email}</p>
+            <p class="${roleClass}">Papel: ${usuario.role}</p>
+            <small>Criado em: ${new Date(usuario.criadoEm).toLocaleDateString()}</small>
+          </div>
+        `;
+        itemsContainer.appendChild(item);
+      });
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+      itemsContainer.innerHTML = '<p class="error">Erro ao carregar usuários</p>';
+    }
+  }
+
+  // Carregar usuários ao inicializar o painel
+  loadUsuarios();
+})();
+</script>

@@ -1,7 +1,6 @@
 const ValidationError = require('../errors/ValidationError');
 const RepositoryError = require('../errors/RepositoryError');
 const logger = require('../log/logger');
-
 class AprovarPedidoLojaUseCase {
   constructor({ pedidoRepo }) {
     this.pedidoRepo = pedidoRepo;
@@ -21,4 +20,4 @@ class AprovarPedidoLojaUseCase {
     }
   }
 }
-module.exports = AprovarPedidoLojaUseCase;
+module.exports = AprovarPedidoLojaUseCase;

@@ -1,0 +1,134 @@
+<div class="panel pedidos">
+  <h2>Pedidos</h2>
+  <form id="pedido-form" class="form">
+    <div class="form-group">
+      <input type="text" id="pedido-descricao" placeholder="Descrição do pedido" required>
+    </div>
+    <div class="form-group">
+      <input type="number" id="pedido-valor" placeholder="Valor" step="0.01" min="0" required>
+    </div>
+    <button type="submit" class="btn primary">Criar Pedido</button>
+  </form>
+  
+  <div id="pedidos-list" class="list-container">
+    <h3>Lista de Pedidos</h3>
+    <div id="pedidos-items" class="items"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const form = document.getElementById('pedido-form');
+  const descricaoInput = document.getElementById('pedido-descricao');
+  const valorInput = document.getElementById('pedido-valor');
+  const itemsContainer = document.getElementById('pedidos-items');
+
+  async function loadPedidos() {
+    try {
+      const response = await fetch('/api/pedidos', { credentials: 'same-origin' });
+      const pedidos = await response.json();
+      
+      itemsContainer.innerHTML = '';
+      pedidos.forEach(pedido => {
+        const item = document.createElement('div');
+        item.className = 'item card';
+        const statusClass = pedido.status === 'approved' ? 'success' : 'warning';
+        item.innerHTML = `
+          <div class="item-info">
+            <h4>${pedido.descricao}</h4>
+            <p>Valor: R$ ${pedido.valor.toFixed(2)}</p>
+            <p class="${statusClass}">Status: ${pedido.status}</p>
+            <small>Criado em: ${new Date(pedido.criadoEm).toLocaleDateString()}</small>
+          </div>
+          <div class="item-actions">
+            ${pedido.status !== 'approved' ? `<button class="btn primary" onclick="aprovarPedido('${pedido._id}')">Aprovar</button>` : ''}
+            <button class="btn secondary" onclick="deletePedido('${pedido._id}')">Excluir</button>
+          </div>
+        `;
+        itemsContainer.appendChild(item);
+      });
+    } catch (error) {
+      console.error('Erro ao carregar pedidos:', error);
+      itemsContainer.innerHTML = '<p class="error">Erro ao carregar pedidos</p>';
+    }
+  }
+
+  console.log('🔍 Pedidos - form encontrado:', !!form);
+  if (form) {
+    console.log('✅ Pedidos - Registrando event listener');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('📝 Pedidos - Submit do formulário');
+      
+      try {
+        const response = await fetch('/api/pedidos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            descricao: descricaoInput.value,
+            valor: parseFloat(valorInput.value)
+          })
+        });
+
+        if (response.ok) {
+          form.reset();
+          loadPedidos();
+          window.showMessage && window.showMessage('Pedido criado com sucesso!', 'success');
+        } else {
+          const error = await response.json();
+          window.showMessage && window.showMessage(error.erro || 'Erro ao criar pedido', 'error');
+        }
+      } catch (error) {
+        console.error('Erro ao criar pedido:', error);
+        window.showMessage && window.showMessage('Erro ao criar pedido', 'error');
+      }
+    });
+  }
+
+  window.aprovarPedido = async function(id) {
+    try {
+      const response = await fetch(`/api/pedidos/${id}/aprovar`, {
+        method: 'POST',
+        credentials: 'same-origin'
+      });
+
+      if (response.ok) {
+        loadPedidos();
+        window.showMessage && window.showMessage('Pedido aprovado com sucesso!', 'success');
+      } else {
+        const error = await response.json();
+        window.showMessage && window.showMessage(error.erro || 'Erro ao aprovar pedido', 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao aprovar pedido:', error);
+      window.showMessage && window.showMessage('Erro ao aprovar pedido', 'error');
+    }
+  };
+
+  window.deletePedido = async function(id) {
+    if (!confirm('Deseja realmente excluir este pedido?')) return;
+    
+    try {
+      const response = await fetch(`/api/pedidos/${id}`, {
+        method: 'DELETE',
+        credentials: 'same-origin'
+      });
+
+      if (response.ok) {
+        loadPedidos();
+        window.showMessage && window.showMessage('Pedido excluído com sucesso!', 'success');
+      } else {
+        const error = await response.json();
+        window.showMessage && window.showMessage(error.erro || 'Erro ao excluir pedido', 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir pedido:', error);
+      window.showMessage && window.showMessage('Erro ao excluir pedido', 'error');
+    }
+  };
+
+  // Carregar pedidos ao inicializar o painel
+  loadPedidos();
+})();
+</script>

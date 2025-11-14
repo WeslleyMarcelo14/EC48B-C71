@@ -2,7 +2,6 @@ const { Pedido } = require('../entities/Pedido');
 const ValidationError = require('../errors/ValidationError');
 const RepositoryError = require('../errors/RepositoryError');
 const logger = require('../log/logger');
-
 class CriarPedidoUseCase {
   constructor({ pedidoRepo, produtoRepo }) {
     this.pedidoRepo = pedidoRepo;
@@ -31,4 +30,4 @@ class CriarPedidoUseCase {
     }
   }
 }
-module.exports = CriarPedidoUseCase;
+module.exports = CriarPedidoUseCase;

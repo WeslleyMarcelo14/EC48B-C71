@@ -1,0 +1,111 @@
+<div class="panel lojas">
+  <h2>Lojas</h2>
+  <form id="loja-form" class="form">
+    <div class="form-group">
+      <input type="text" id="loja-nome" placeholder="Nome da loja" required>
+    </div>
+    <div class="form-group">
+      <input type="text" id="loja-cidade" placeholder="Cidade" required>
+    </div>
+    <button type="submit" class="btn primary">Cadastrar Loja</button>
+  </form>
+  
+  <div id="lojas-list" class="list-container">
+    <h3>Lista de Lojas</h3>
+    <div id="lojas-items" class="items"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const form = document.getElementById('loja-form');
+  const nomeInput = document.getElementById('loja-nome');
+  const cidadeInput = document.getElementById('loja-cidade');
+  const itemsContainer = document.getElementById('lojas-items');
+
+  async function loadLojas() {
+    try {
+      const response = await fetch('/api/lojas', { credentials: 'same-origin' });
+      const lojas = await response.json();
+      
+      itemsContainer.innerHTML = '';
+      lojas.forEach(loja => {
+        const item = document.createElement('div');
+        item.className = 'item card';
+        item.innerHTML = `
+          <div class="item-info">
+            <h4>${loja.nome}</h4>
+            <p>Cidade: ${loja.cidade}</p>
+            <small>Criado em: ${new Date(loja.criadoEm).toLocaleDateString()}</small>
+          </div>
+          <div class="item-actions">
+            <button class="btn secondary" onclick="deleteLoja('${loja._id}')">Excluir</button>
+          </div>
+        `;
+        itemsContainer.appendChild(item);
+      });
+    } catch (error) {
+      console.error('Erro ao carregar lojas:', error);
+      itemsContainer.innerHTML = '<p class="error">Erro ao carregar lojas</p>';
+    }
+  }
+
+  console.log('🔍 Lojas - form encontrado:', !!form);
+  if (form) {
+    console.log('✅ Lojas - Registrando event listener');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('📝 Lojas - Submit do formulário');
+      
+      try {
+        const response = await fetch('/api/lojas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            nome: nomeInput.value,
+            cidade: cidadeInput.value
+          })
+        });
+
+        if (response.ok) {
+          form.reset();
+          loadLojas();
+          window.showMessage && window.showMessage('Loja cadastrada com sucesso!', 'success');
+        } else {
+          const error = await response.json();
+          window.showMessage && window.showMessage(error.erro || 'Erro ao cadastrar loja', 'error');
+        }
+      } catch (error) {
+        console.error('Erro ao cadastrar loja:', error);
+        window.showMessage && window.showMessage('Erro ao cadastrar loja', 'error');
+      }
+    });
+  }
+
+  window.deleteLoja = async function(id) {
+    if (!confirm('Deseja realmente excluir esta loja?')) return;
+    
+    try {
+      const response = await fetch(`/api/lojas/${id}`, {
+        method: 'DELETE',
+        credentials: 'same-origin'
+      });
+
+      if (response.ok) {
+        loadLojas();
+        window.showMessage && window.showMessage('Loja excluída com sucesso!', 'success');
+      } else {
+        const error = await response.json();
+        window.showMessage && window.showMessage(error.erro || 'Erro ao excluir loja', 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir loja:', error);
+      window.showMessage && window.showMessage('Erro ao excluir loja', 'error');
+    }
+  };
+
+  // Carregar lojas ao inicializar o painel
+  loadLojas();
+})();
+</script>

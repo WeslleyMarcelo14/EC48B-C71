@@ -1,25 +1,24 @@
 {
   "name": "ec48b-c71",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Projeto Express.js com sessões e API",
+  "main": "server.js",
   "scripts": {
-    "start": "node demo/run.js",
-    "dev": "NODE_ENV=development node demo/run.js",
-    "clean": "rm -rf logs/*",
-    "test": "echo \"(Sem testes automatizados no momento)\" && exit 0"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/WeslleyMarcelo14/EC48B-C71.git"
-  },
+  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/WeslleyMarcelo14/EC48B-C71/issues"
-  },
-  "homepage": "https://github.com/WeslleyMarcelo14/EC48B-C71#readme",
+  "license": "MIT",
   "dependencies": {
-    "mongodb": "^3.7.4"
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.9",
+    "express": "^5.1.0",
+    "express-session": "^1.17.3",
+    "mongodb": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }

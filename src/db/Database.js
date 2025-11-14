@@ -1,7 +1,6 @@
 const { MongoClient, ObjectId } = require('mongodb');
 const config = require('../config/env');
 const RepositoryError = require('../errors/RepositoryError');
-
 class Database {
   constructor() {
     this._client = null;
@@ -28,4 +27,4 @@ class Database {
     this._client = null; this._db = null;
   }
 }
-module.exports = new Database();
+module.exports = new Database();

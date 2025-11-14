@@ -1,47 +1,68 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Entregas</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f7f7f7; }
-    header { background: #2d3e50; color: #fff; padding: 1.5em 2em; }
-    h1 { margin: 0; font-size: 2em; }
-    nav { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.04); padding: 1em 2em; display: flex; gap: 2em; }
-    nav a { color: #2d3e50; text-decoration: none; font-weight: bold; transition: color 0.2s; }
-    nav a:hover { color: #007bff; }
-    main { max-width: 700px; margin: 2em auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 2em; }
-    .info { color: #555; margin-top: 1em; }
-    ul { margin: 1em 0 0 1.5em; }
-    @media (max-width: 600px) {
-      main { padding: 1em; }
-      nav { flex-direction: column; gap: 1em; padding: 1em; }
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>iFood — Projeto</title>
+  <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-  <header>
-    <h1>Sistema de Entregas</h1>
-  </header>
-  <nav>
-    <a href="/static/usuarios.html">Usuários</a>
-    <a href="/static/produtos.html">Produtos</a>
-    <a href="/static/pedidos.html">Pedidos</a>
-    <a href="/static/entregas.html">Entregas</a>
-    <a href="/static/lojas.html">Lojas</a>
-  </nav>
-  <main>
-    <h2>Bem-vindo!</h2>
-    <p>Este é um sistema de SGBD de entrega</p>
-    <ul>
-      <li>Usuários</li>
-      <li>Produtos</li>
-      <li>Pedidos</li>
-      <li>Entregas</li>
-      <li>Lojas</li>
-    </ul>
+  <div id="app">
+    <div id="main">
+      <header id="topbar">
 
-  </main>
+        <div class="auth-area">
+          <button id="top-logout-btn" class="btn secondary hidden">Logout</button>
+        </div>
+      </header>
+
+      <aside id="sidebar-nav" class="hidden">
+        <nav>
+          <h2>Menu</h2>
+          <div id="user-name">Não autenticado</div>
+          <button class="nav-btn active" data-target="produtos" data-role="both">Produtos</button>
+          <button class="nav-btn" data-target="pedidos" data-role="both">Pedidos</button>
+          <button class="nav-btn" data-target="entregas" data-role="both">Entregas</button>
+          <button class="nav-btn" data-target="lojas" data-role="vendedor">Lojas</button>
+          <button class="nav-btn" data-target="usuarios" data-role="both">Usuários</button>
+          <button id="logout-btn" class="btn secondary hidden">Logout</button>
+        </nav>
+      </aside>
+
+      <main id="content">
+        <section id="auth-panel" class="card auth-card">
+          <div class="auth-forms">
+            <div>
+              <h3>Entrar</h3>
+              <form id="form-login">
+                <input name="email" placeholder="Email" required />
+                <input name="senha" type="password" placeholder="Senha" required />
+                <button type="submit" class="btn">Entrar</button>
+              </form>
+            </div>
+            <div>
+              <h3>Registrar</h3>
+              <form id="form-register">
+                <input name="nome" placeholder="Nome" required />
+                <input name="email" placeholder="Email" required />
+                <input name="senha" type="password" placeholder="Senha" required />
+                <select name="role" required>
+                  <option value="cliente">Cliente</option>
+                  <option value="vendedor">Vendedor</option>
+                </select>
+                <button type="submit" class="btn">Registrar</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section id="panels" class="hidden">
+        </section>
+        <section id="message" class="hidden card"></section>
+      </main>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 const ValidationError = require('../errors/ValidationError');
 const RepositoryError = require('../errors/RepositoryError');
 const logger = require('../log/logger');
-
 class AtualizarStatusEntregaUseCase {
   constructor({ entregaRepo }) { this.entregaRepo = entregaRepo; }
   async execute({ entregaId, status }) {
@@ -17,4 +16,4 @@ class AtualizarStatusEntregaUseCase {
     }
   }
 }
-module.exports = AtualizarStatusEntregaUseCase;
+module.exports = AtualizarStatusEntregaUseCase;

@@ -1,0 +1,117 @@
+<div class="panel entregas">
+  <h2>Entregas</h2>
+  <form id="entrega-form" class="form">
+    <div class="form-group">
+      <input type="text" id="entrega-destinatario" placeholder="Destinatário" required>
+    </div>
+    <div class="form-group">
+      <select id="entrega-status" required>
+        <option value="">Selecione o status</option>
+        <option value="pendente">Pendente</option>
+        <option value="em_transito">Em Trânsito</option>
+        <option value="entregue">Entregue</option>
+      </select>
+    </div>
+    <button type="submit" class="btn primary">Registrar Entrega</button>
+  </form>
+  
+  <div id="entregas-list" class="list-container">
+    <h3>Lista de Entregas</h3>
+    <div id="entregas-items" class="items"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const form = document.getElementById('entrega-form');
+  const destinatarioInput = document.getElementById('entrega-destinatario');
+  const statusInput = document.getElementById('entrega-status');
+  const itemsContainer = document.getElementById('entregas-items');
+
+  async function loadEntregas() {
+    try {
+      const response = await fetch('/api/entregas', { credentials: 'same-origin' });
+      const entregas = await response.json();
+      
+      itemsContainer.innerHTML = '';
+      entregas.forEach(entrega => {
+        const item = document.createElement('div');
+        item.className = 'item card';
+        const statusClass = entrega.status === 'entregue' ? 'success' : entrega.status === 'em_transito' ? 'warning' : 'secondary';
+        item.innerHTML = `
+          <div class="item-info">
+            <h4>Destinatário: ${entrega.destinatario}</h4>
+            <p class="${statusClass}">Status: ${entrega.status}</p>
+            <small>Criado em: ${new Date(entrega.criadoEm).toLocaleDateString()}</small>
+          </div>
+          <div class="item-actions">
+            <button class="btn secondary" onclick="deleteEntrega('${entrega._id}')">Excluir</button>
+          </div>
+        `;
+        itemsContainer.appendChild(item);
+      });
+    } catch (error) {
+      console.error('Erro ao carregar entregas:', error);
+      itemsContainer.innerHTML = '<p class="error">Erro ao carregar entregas</p>';
+    }
+  }
+
+  console.log('🔍 Entregas - form encontrado:', !!form);
+  if (form) {
+    console.log('✅ Entregas - Registrando event listener');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      console.log('📝 Entregas - Submit do formulário');
+      
+      try {
+        const response = await fetch('/api/entregas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            destinatario: destinatarioInput.value,
+            status: statusInput.value
+          })
+        });
+
+        if (response.ok) {
+          form.reset();
+          loadEntregas();
+          window.showMessage && window.showMessage('Entrega registrada com sucesso!', 'success');
+        } else {
+          const error = await response.json();
+          window.showMessage && window.showMessage(error.erro || 'Erro ao registrar entrega', 'error');
+        }
+      } catch (error) {
+        console.error('Erro ao registrar entrega:', error);
+        window.showMessage && window.showMessage('Erro ao registrar entrega', 'error');
+      }
+    });
+  }
+
+  window.deleteEntrega = async function(id) {
+    if (!confirm('Deseja realmente excluir esta entrega?')) return;
+    
+    try {
+      const response = await fetch(`/api/entregas/${id}`, {
+        method: 'DELETE',
+        credentials: 'same-origin'
+      });
+
+      if (response.ok) {
+        loadEntregas();
+        window.showMessage && window.showMessage('Entrega excluída com sucesso!', 'success');
+      } else {
+        const error = await response.json();
+        window.showMessage && window.showMessage(error.erro || 'Erro ao excluir entrega', 'error');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir entrega:', error);
+      window.showMessage && window.showMessage('Erro ao excluir entrega', 'error');
+    }
+  };
+
+  // Carregar entregas ao inicializar o painel
+  loadEntregas();
+})();
+</script>
